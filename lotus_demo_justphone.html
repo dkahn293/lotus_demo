@@ -1,0 +1,1461 @@
+
+<!DOCTYPE html>
+<html>
+<header>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-blue.min.css">
+
+
+</header>
+<h2 class="header_text">Interactive Demo</h2>
+<div class="real_outer_wrapper">
+
+  <div class="outer_phone_wrapper"> 
+
+    <div id="phone"></div>
+    <img id="statusbar_icons" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab558eb8a922d7af064130d/1521834219715/statusbar+buttons.png">
+    <div class="wrapper">
+    <div class="searchbox_wrapper">
+      <div class="searchbox">
+        <input id="pac-input" class="constols" type="text" placeholder="Search or drop pin">
+        <div id="searchbox_divider"></div>
+        
+      </div>
+
+    </div>
+    <button id="current_location_button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect">
+          <i class="material-icons" id="current_location">my_location</i>
+          <!-- <img id="new_pin_icon" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab74f8a0e2e729140b159b9/1521962890404/add_pin_icon_new.png"> -->
+    </button>
+    <div id="map">
+        <!-- <div id="testbox"></div> -->
+
+    </div>
+    <div class="tray_wrapper">
+      <div class="knob_container">
+        <div class="knob"></div>
+      </div>
+        
+
+      <div class="locations_list dragscroll"></div>
+      
+      <!-- <br>
+      <div class="slider"> </div> -->
+
+      <!-- <div class="card">
+        <img src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2baca758d461cf78750f4/1521662666843/park+pin.png">
+        <div class="card_label">
+          <div class="title">Park</div>
+          <div class="duration">5 minutes</div>
+        </div>
+      </div> -->
+    </div>
+    </div>
+    <div id="navbar">
+      <img id="navbar_icons" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab5547a70a6ad6a9cd9ef4c/1521833082449/navbar+buttons.png">
+
+    </div>
+
+    
+  </div>
+<!-- <div class="test_test_test"></div> -->
+
+
+
+<!-- Replace the value of the key parameter with your own API key. -->
+</html>
+
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<script async 
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1eS4YBVSrdVeVQGbU5Prpz-eDPL3_OFM&callback=initMap&libraries=places">
+</script>
+
+
+
+
+
+
+<style>
+
+.header_text {
+text-align: center;
+}
+
+#toggle_card{
+  margin-top: 15px;
+  margin-bottom: 0px;
+  width: 100%;
+}
+
+.mdl-list {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.mdl-card {
+  margin: 10px;
+}
+
+#simulate_button {
+  width: 100px;
+  margin: 15px;
+}
+
+.simulation_list_icon {
+  margin-right: 15px;
+}
+
+.locations_list_simulation {
+  height: 200px;
+  width: 300px;
+  overflow-y: auto;
+  padding-top: 0px;
+  /*background-color: lightgrey;*/
+}
+
+
+
+.demo-list-control {
+  width: 100%;
+
+}
+
+.demo-list-radio {
+  display: inline;
+}
+
+
+
+#current_location {
+  color: darkgrey;
+  font-size: 0.8em;
+}
+
+
+
+/*#searchbox_divider {
+  position: absolute;
+  left: 240px;
+  top: 6px;
+  height: 30px;
+  width: 1px;
+  background-color: #DDDDDD;
+}*/
+
+#current_location_button{
+  top: 345px;
+  left: 245px;
+  z-index: 50;
+  background: rgba(245, 245, 245, 0.85);
+
+  transition: all .4s ease-in-out;
+  position: absolute;
+  border: 0 solid #FFFFFF;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.12);
+
+
+
+    /*margin: auto;*/
+}
+
+.searchbox_wrapper {
+  position: absolute;
+  top: 30px;
+  left: 15px;
+  right: 15px;
+  z-index: 4;
+  width: 90%;
+  height: 38px;
+  transition: all .4s ease-in-out;
+}
+
+.searchbox {
+  /* app bar bg: */
+  width: 100%;
+  height: 40px;
+  background: rgba(245, 245, 245, 0.85);
+  border: 0 solid #FFFFFF;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.12);
+  
+
+
+}
+
+
+#pac-input {
+  outline: none;
+  border: none;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 300;
+  /*background-color: transparent;*/
+  /*margin-top: 30px;*/
+  padding-top: 9px;
+  margin-left: 7px;
+  padding-left: 10px;
+  background-color: transparent;
+  
+  text-overflow: ellipsis;
+
+
+
+}
+
+.pac-container {
+  min-width: 270px;
+  margin-top: 9px;
+  margin-left: -7px;
+  background: rgba(245, 245, 245, 0.85);
+  border: 0 solid #FFFFFF;
+  box-shadow: 0 4px 4px 0 rgba(0,0,0,0.12);
+
+
+
+}
+
+.pac-icon {
+  display: none;
+}
+
+.real_outer_wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content:center;
+
+}
+
+#statusbar_icons {
+  z-index: 3;
+  position: absolute;
+  top: 40px;
+  left: 218px;
+}
+
+#navbar_icons {
+  align-self: center;
+}
+#navbar {
+  width: 300px;
+  height: 30px;
+  top: 590px;
+  left: 10px;
+  background-color: black;
+  /*opacity: 0.3;*/
+  z-index: 3;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+
+}
+
+
+.simulation_wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin-top: 50px;
+}
+
+
+
+.simulation_controls {
+  /*position: absolute;*/
+  min-height: 200px;
+  width: 100%;
+  display: flex;
+  margin-bottom: 50px;
+}
+
+.band {
+  /*display: inline-block;*/
+  position: relative;
+}
+
+
+
+.band_text {
+  position: absolute;
+  top: 177px;
+  left: 112px;
+  width: 200px;
+  padding: 10px 20px 10px 20px;
+  height: 70px;
+
+}
+
+.band_text_header {
+  color: white;
+  font-family: Roboto;
+  font-weight: 300;
+
+}
+
+.band_text_footer {
+  color: white;
+  font-family: Roboto;
+  font-weight: 300;
+
+  opacity: .7;
+
+
+}
+#band_image {
+
+    /*position: absolute;*/
+    /*bottom: 50px;*/
+
+
+}
+.test_test_test {
+  background-color: blue;
+  display: inline-block;
+  width: 700px;
+  height: 500px; 
+  align-self: center;
+}
+
+.outer_phone_wrapper {
+  margin: 40px;
+  position: relative;
+  display: inline-block;
+  height: 100%
+  width: 100%;
+  min-height: 650px;
+  min-width: 320px;
+}
+#phone {
+  height: 650px;
+  width: 320px;
+  margin-right: 50px;
+
+/* Phones_3: */
+background: #373737;
+box-shadow: -20px 35px 120px 0 rgba(89,89,89,0.50), inset 10px -10px 22px 0 rgba(39,39,39,0.73), inset 15px 0 11px 0 rgba(255,255,255,0.15);
+border-radius: 30px;
+  z-index: 0;
+  position: absolute;
+}
+
+.wrapper {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  z-index: 1;
+
+}
+.card_large_icon {
+  align-self: center;
+  margin-right: 8px;
+}
+
+#slider_label {
+  text-align: center; 
+  margin-bottom: 15px;
+  /*margin-left: 30px;*/
+}
+
+.type_icon_label_lotus {
+  text-align: center;
+  margin-top: 10px;
+}
+.type_icon_lotus {
+margin-left: 15px;
+margin-right: 15px;
+display: inline;
+}
+
+.location_types_icons_lotus {
+  display: flex;
+  align-items: flex-end;
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+
+.pin_name {
+  padding: 0px 23px 0px 23px;
+}
+
+.buttons {
+  display: flex; /* or inline-flex */
+  justify-content: space-evenly;
+}
+.edit_marker {
+  width: 300px;
+  height: 300px;
+  /*padding: 15px;*/
+
+}
+
+.knob {
+  height: 3px;
+  width: 40px;
+  border-radius: 3px;
+  background-color: lightgrey;
+  text-align: center;
+  margin: auto;
+/*  margin-top: 15px;
+  margin-bottom: 15px;*/
+}
+
+.knob_container {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  width: 100%;
+
+}
+
+.locations_list {
+  height: 115px;
+  width: 300px;
+  overflow-y: hidden;
+  transition: all .4s ease-in-out;
+
+  /*background-color: white;*/
+
+/* app bar bg: */
+  
+}
+
+.tray_wrapper{
+  height: 150px;
+  width: 300px;
+  position: absolute; 
+  top: 400px; 
+  z-index: 100;
+  background: rgba(245, 245, 245, 0.85);
+  border: 0 solid #FFFFFF;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,0.12);
+  transition: all .4s ease-in-out;
+
+
+}
+
+.card_lotus {
+  background-color: #FDFDFD;
+  margin: 15px;
+  padding: 15px;
+  display: flex;
+}
+
+.card_label_lotus {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.title_lotus {
+  font-family: 'Roboto-Light', sans-serif;
+  font-size: 20px;
+}
+
+.mdl-textfield {
+  margin-top: -15px;
+  margin-bottom: 10px;
+}
+
+.duration {
+  margin-top: 5px;
+  font-family: 'Roboto-Light', sans-serif;
+  font-size: 15px;
+}
+#map {
+  height: 550px;
+  width: 300px;
+  z-index: 1;
+ }
+
+ #testbox {
+  background-color: black;
+  width: 20px;
+  height: 20px;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+ }
+</style>
+
+
+<script>
+
+
+  var icons = {
+    work: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2b44a88251b71c000f6dc/1521661002629/work+icon+new+2.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab32571758d46f90e1ef3d2/1521689969266/work_icon.png'
+    },
+    home: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2b58688251b71c0014c78/1521661318084/home+pin+new.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab32554758d46f90e1eefea/1521689940695/home_icon.png'
+    },
+    food: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2b5830e2e721475bef89f/1521661315353/eating+pin+new.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab325452b6a28cd301acc60/1521689925414/eating_icon.png'
+    },
+    park: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2baca758d461cf78750f4/1521662666843/park+pin.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3255bf950b7346969ec71/1521689947514/park_icon.png'
+    },
+    gym: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2bac4562fa754864a5236/1521662660708/gym+pin.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3253f0e2e72ea7686404d/1521689919091/gym_icon.png'
+    },
+    bus: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2baa2562fa754864a4851/1521662626942/bus+pin.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3254f70a6ad9909b6c4f3/1521689935446/bus_icon.png'
+    },
+    default: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab2b67c1ae6cf198f189a69/1521661564017/default+pin+new.png',
+      large_icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3244503ce64a9d7fe0db1/1521689669169/pin_icon.png'
+    },
+    current: {
+      icon: 'https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab8157f352f538e1553bec4/1522013567986/current_location_icon.png'
+    }
+  };
+  var pins = [];
+
+  var current_location_coordinates = {lat: 37.425899, lng: -122.168851};
+  var current_location_marker = {};
+
+
+  var map = {};
+
+function initMap() {
+  var Stanford = {lat: 37.4274745, lng: -122.16971899999999};
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 15,
+    center: current_location_coordinates,
+    disableDefaultUI: true,
+    styles: [
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "stylers": [
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  }
+]
+
+  });
+//marker icons
+
+
+  //default pins
+  var features = [
+    {
+      position: new google.maps.LatLng(37.4291471, -122.16742579999999),
+      type: 'work',
+      name: 'Lathrop Library',
+      duration: 2
+    }, {
+      position: new google.maps.LatLng(37.4230813, -122.16873950000002),
+      type: 'home',
+      name: 'Columbae',
+      duration: 4
+    }, {
+      position: new google.maps.LatLng(37.4254109, -122.16409699999997),
+      type: 'food',
+      name: 'Arillaga',
+      duration: 1
+    }, {
+      position: Stanford,
+      type: 'default',
+      name: 'Quad',
+      duration: 1
+    }
+  ];
+
+  //searchbox
+  var input = document.getElementById('pac-input');
+  var searchBox = new google.maps.places.SearchBox(input);
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  // $("#pac-input").css("display", "inline-block");
+  searchBox.addListener('places_changed', function() {
+
+    var places = searchBox.getPlaces();
+    if (places.length == 0) {
+      return;
+    }
+    var place = places[0];
+
+    if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+    }
+
+    console.log(place);
+
+    var marker = new google.maps.Marker({
+      position: place.geometry.location,
+      icon: icons.default.icon,
+      large_icon: icons.default.large_icon,
+      icon_old: icons.default.icon,
+      large_icon_old: icons.default.large_icon,
+      draggable:true,
+      crossOnDrag: false,
+
+      map: map
+    });
+
+      marker.duration = 1;
+      marker.name = place.name;
+      marker.uuid = guid();
+      pins.push(marker);
+      // console.log(pins);
+
+      marker.circle = new google.maps.Circle({
+        map: map,
+        clickable: false,
+        // metres
+        radius: 100,
+        fillColor: '#fff',
+        fillOpacity: 0,
+        strokeColor: '#80CBC4',
+        strokeOpacity: 0,
+        strokeWeight: .8
+    });
+
+    console.log("created circle");
+
+    marker.circle.bindTo('center', marker, 'position');
+
+      pin_details(marker);
+      slideUp();
+
+
+      marker.addListener('click', function() {
+        pin_details(marker);
+        slideUp();
+        if (map.getZoom() != 17 ) {
+          map.setZoom(17);
+
+        }
+        map.setCenter(newCenter(marker.getPosition()));
+      });
+      if (map.getZoom() != 17 ) {
+          map.setZoom(17);
+
+      }
+      map.setCenter(newCenter(marker.getPosition()));
+
+  });
+
+  //add current location marker
+  current_location_marker = new google.maps.Marker({
+      position: new google.maps.LatLng(current_location_coordinates.lat, current_location_coordinates.lng),
+      icon: icons['current'].icon,
+      draggable: true,
+      crossOnDrag: false,
+
+      map: map,
+      zIndex: 0
+    });
+
+
+current_location_marker.addListener('dragend', function() {
+
+  pins.forEach( function(pin) {
+
+    var latLngCurrent = new google.maps.LatLng(current_location_marker.position.lat(), current_location_marker.position.lng());
+
+
+
+    var bounds = pin.circle.getBounds();
+
+    
+
+    if ( bounds.contains( latLngCurrent ) ) {
+      exerciseSimulation(pin);
+
+
+      
+    }
+
+
+    
+
+    // console.log( pin.name,  );
+    
+  });
+
+
+});
+  // current_location_marker.addListener('click', function() {
+  //   console.log('LongPress detected');
+
+  //     var marker = new google.maps.Marker({
+  //       position: current_location_marker.position,
+  //       icon: icons.default.icon,
+  //       large_icon: icons.default.large_icon,
+  //       icon_old: icons.default.icon,
+  //       large_icon_old: icons.default.large_icon,
+  //       draggable:true,
+  //       crossOnDrag: false,
+  //       zIndex: 100,
+  //       map: map
+  //     });
+
+  //     marker.duration = 1;
+  //     marker.name = 'New Location';
+  //     marker.uuid = guid();
+  //     pins.push(marker);
+  //     // console.log(pins);
+
+  //     pin_details(marker);
+  //     slideUp();
+  //     marker.addListener('click', function() {
+  //       pin_details(marker);
+  //       if (map.getZoom() != 17 ) {
+  //         map.setZoom(17);
+
+  //       }
+  //       map.setCenter(newCenter(marker.getPosition()));
+  //     });
+  //     if (map.getZoom() != 17 ) {
+  //         map.setZoom(17);
+
+  //     }
+  //     map.setCenter(newCenter(marker.getPosition()));
+  //   // $( "#map").trigger( "click" );
+  // });
+
+  // $(current_location_marker).css("pointer-events", "none");
+
+  google.maps.event.addListener(map, 'center_changed', function() { 
+    // alert('map dragged'); 
+    $("#current_location").css("color", "darkgrey");
+
+
+  });
+
+
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener('bounds_changed', function() {
+    searchBox.setBounds(map.getBounds());
+  //   if ($(".tray_wrapper").css("height") == "300px") {
+
+  //   slideDown();
+    
+  // }
+  });
+
+  // Create markers.
+  features.forEach(function(feature) {
+    var marker = new google.maps.Marker({
+      position: feature.position,
+      icon: icons[feature.type].icon,
+      large_icon: icons[feature.type].large_icon,
+      icon_old: icons[feature.type].icon,
+      large_icon_old: icons[feature.type].large_icon,
+      draggable:true,
+      crossOnDrag: false,
+      zIndex: 100,
+      map: map
+    });
+
+    marker.duration = feature.duration;
+    marker.name = feature.name;
+    marker.uuid = guid();
+    pins.push(marker);
+
+
+    //add radius
+
+    marker.circle = new google.maps.Circle({
+        map: map,
+        clickable: false,
+        // metres
+        radius: 100,
+        fillColor: '#fff',
+        fillOpacity: 0,
+        strokeColor: '#80CBC4',
+        strokeOpacity: 0,
+        strokeWeight: .8
+    });
+
+    console.log("created circle");
+
+    marker.circle.bindTo('center', marker, 'position');
+
+    // console.log(pins);
+
+
+    marker.addListener('click', function() {
+      pin_details(marker);
+      slideUp();
+      $(".locations_list").css("overflow-y", "hidden");
+      console.log(marker.getZIndex());
+
+      map.setZoom(17);
+
+; // move center one quarter map height down
+
+    
+
+    map.setCenter(newCenter(marker.getPosition()));
+    });
+  });
+
+  // new LongPress(map, 300);
+  google.maps.event.addListener(map, 'click', function(event) {
+      console.log('LongPress detected');
+
+      var marker = new google.maps.Marker({
+        position: event.latLng,
+        icon: icons.default.icon,
+        large_icon: icons.default.large_icon,
+        icon_old: icons.default.icon,
+        large_icon_old: icons.default.large_icon,
+        draggable:true,
+        crossOnDrag: false,
+        zIndex: 100,
+        map: map
+      });
+
+      marker.duration = 1;
+      marker.name = 'New Location';
+      marker.uuid = guid();
+      pins.push(marker);
+
+      marker.circle = new google.maps.Circle({
+        map: map,
+        clickable: false,
+        // metres
+        radius: 100,
+        fillColor: '#fff',
+        fillOpacity: 0,
+        strokeColor: '#80CBC4',
+        strokeOpacity: 0,
+        strokeWeight: .8
+    });
+
+    console.log("created circle");
+
+    marker.circle.bindTo('center', marker, 'position');
+      // console.log(pins);
+
+      pin_details(marker);
+      slideUp();
+      marker.addListener('click', function() {
+        pin_details(marker);
+        slideUp();
+        if (map.getZoom() != 17 ) {
+          map.setZoom(17);
+
+        }
+        map.setCenter(newCenter(marker.getPosition()));
+      });
+      if (map.getZoom() != 17 ) {
+          map.setZoom(17);
+
+      }
+      map.setCenter(newCenter(marker.getPosition()));
+  });
+
+  update_list();
+}
+
+
+function update_list() {
+    $(".locations_list").empty();
+    $(".locations_list").css("overflow-y", "auto");
+    $('.locations_list').scrollTop(0);
+    $('.locations_list').addClass("dragscroll");
+    dragscroll.reset();
+
+
+    if(pins.length == 0) {
+      slideDown();
+    }
+
+
+    pins.forEach(function(pin) {
+
+
+    var innerHTML = '<div class="card_lotus" id="'+ pin.uuid +'"><img class="card_large_icon" src=' + pin.large_icon + '><div class="card_label_lotus"><div class="title_lotus">'+ pin.name+'</div><div class="duration">' + pin.duration + ' minutes</div></div>';
+
+    // console.log(innerHTML);
+
+
+    $(".locations_list").append(innerHTML);
+    
+    var unique_id = "\#"+pin.uuid;
+    // console.log(unique_id);
+
+  
+    var isDragging = false;
+    $(unique_id)
+    .mousedown(function() {
+        $(window).mousemove(function() {
+            isDragging = true;
+            $(window).unbind("mousemove");
+        });
+    })
+    .mouseup(function() {
+        var wasDragging = isDragging;
+        isDragging = false;
+        $(window).unbind("mousemove");
+        if (!wasDragging) {
+
+          var marker = pin;
+          slideUp();
+
+          // myArray.filter(x => x.uuid === clicked_pin.uuid);
+         // console.log('Handler for .click() called.');
+          pin_details(marker);
+          if (map.getZoom() != 17 ) {
+              map.setZoom(17);
+
+          }
+          map.setCenter(newCenter(marker.getPosition()));
+
+
+            // $(this).selection();
+        }
+    });
+
+
+    // $(unique_id).click(function() {
+
+    // });
+
+  });
+
+    update_simulation_list();
+
+}
+
+function pin_details(marker) {
+  $(".locations_list").empty();
+  $('.locations_list').removeClass("dragscroll");
+
+
+  // $(".locations_list").scrollTop(30);
+
+
+
+
+
+  var innerHTML  = '<div class="edit_marker"><form action="#" class="pin_name"><div class="mdl-textfield mdl-js-textfield" ><input class="mdl-textfield__input" type="text" id="sample1"><label class="mdl-textfield__label" for="sample1">Give it a name</label></div></form><div class="location_types_icons_lotus dragscroll"><div class="type_container" id="default"><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3244503ce64a9d7fe0db1/1521689669169/pin_icon.png"><br><div class="type_icon_label_lotus">Default</div></div><div class="type_container" id=home><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab32554758d46f90e1eefea/1521689940695/home_icon.png"><br><div class="type_icon_label_lotus">Home</div></div><div class="type_container" id="work"><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab32571758d46f90e1ef3d2/1521689969266/work_icon.png"><br><div class="type_icon_label_lotus">Work</div></div><div class="type_container" id="food"><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab325452b6a28cd301acc60/1521689925414/eating_icon.png"><br><div class="type_icon_label_lotus">Eating</div></div><div class="type_container" id="gym"><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3253f0e2e72ea7686404d/1521689919091/gym_icon.png"><br><div class="type_icon_label_lotus">Gym</div></div><div class="type_container" id="park"><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3255bf950b7346969ec71/1521689947514/park_icon.png"><br><div class="type_icon_label_lotus">Park</div></div><div class="type_container" id="bus"><img class="type_icon_lotus" src="https://static1.squarespace.com/static/597bd63d59cc681334437fdc/t/5ab3254f70a6ad9909b6c4f3/1521689935446/bus_icon.png"><br><div class="type_icon_label_lotus">Transit</div></div></div><br><div id="slider_label">5 minutes</div><input class="mdl-slider mdl-js-slider" type="range" min="0" max="5" value="3" tabindex="0" oninput = "updateSliderValue(this.value)" onchange = "updateSliderValue(this.value)"><br><div class="buttons"><button class="mdl-button mdl-js-button mdl-button--primary mdl-js-ripple-effect" id="save_button">SAVE</button><button id="cancel_button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:grey">CANCEL</button><button id="delete_button" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="color:grey">DELETE</button></div></div>'
+  // console.log(marker);
+  $(".locations_list").append(innerHTML);
+  $('.locations_list').scrollTop(10);
+  $(".locations_list").css("overflow-y", "hidden");
+
+  dragscroll.reset();
+
+
+
+  if(!(typeof(componentHandler) == 'undefined')){
+    componentHandler.upgradeAllRegistered();
+  }
+
+
+  //TODO clear saved marker after exiting
+
+  if (marker.name != "New Location") {
+    if (marker.name != "Unnamed Location") {
+      $(".mdl-textfield").get(0).MaterialTextfield.change(marker.name);
+    }
+  }
+
+      $(".type_container").css("opacity", "0.3");
+
+//EDGE CASE: if the thing needs to be scrolled over to center on the current icon
+  switch(marker.large_icon) {
+
+      case icons['work'].large_icon:
+          $("#work").css("opacity", "1.0");
+          //code block
+          // console.log("YESSS");
+          break;
+      case icons['home'].large_icon:
+          $("#home").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['gym'].large_icon:
+          $("#gym").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['bus'].large_icon:
+          $("#bus").css("opacity", "1.0");
+         // code block
+          break;
+      case icons['food'].large_icon:
+          $("#food").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['park'].large_icon:
+          $("#park").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['default'].large_icon:
+          $("#default").css("opacity", "1.0");
+          //code block
+          break;    
+      default:
+          $("#default").css("opacity", "1.0");
+
+        // console.log("NOPE");
+          //code block
+  }
+
+  updateSliderValue(marker.duration); 
+  $(".mdl-slider").get(0).MaterialSlider.change(marker.duration);
+
+  //TODO: figure out why it's disapearing....????
+
+
+
+  var isDragging = false;
+  $(".type_container")
+  .mousedown(function() {
+      $(window).mousemove(function() {
+          isDragging = true;
+          $(window).unbind("mousemove");
+      });
+  })
+  .mouseup(function() {
+      var wasDragging = isDragging;
+      isDragging = false;
+      $(window).unbind("mousemove");
+      if (!wasDragging) {
+
+        $(".type_container").css("opacity", "0.3");
+        $(event.target).css("opacity", "1.0");
+        $(event.target).parent().css("opacity", "1.0");
+
+        var type = $(event.target).attr('id');
+        if (type == undefined) {
+          type = $(event.target).parent().attr('id');
+        }
+
+        // console.log(icons[type].icon);
+        // console.log(marker);
+
+        marker.icon = icons[type].icon;
+        marker.large_icon = icons[type].large_icon;
+
+        // To remove the marker from the map
+        marker.setMap(null);
+        marker.setMap(map);
+
+          // $(this).selection();
+      }
+  });
+  // $(".type_container").click(function() {
+
+
+
+  //    console.log(marker.icon);
+
+
+  //   // marker.icon = 
+
+  //   //TODO: set pin, set type, set 
+  //   // console.log("button clicked");
+
+  // });
+
+  $("#save_button").click(function() {
+
+    var name = $(".mdl-textfield__input").val();
+
+    if (name != "") {
+      marker.name = name;
+    } else {
+      marker.name = "Unnamed Location";
+    }
+    marker.duration = $(".mdl-slider").val();
+
+
+    marker.icon_old = marker.icon;
+    marker.large_icon_old = marker.large_icon;
+
+    // console.log("save");
+
+    update_list();
+
+  });
+
+  $("#cancel_button").click(function() {
+      // console.log("canel");
+
+      if (marker.icon != marker.icon_old) {
+        marker.icon = marker.icon_old;
+        marker.large_icon = marker.large_icon_old;
+  // To remove the marker from the map
+        marker.setMap(null);
+        marker.setMap(map);
+      }
+
+
+      update_list();
+  });
+
+  $(".knob_container").click(function() {
+      // console.log("canel");
+      if (marker.icon != marker.icon_old) {
+        marker.icon = marker.icon_old;
+        marker.large_icon = marker.large_icon_old;
+  // To remove the marker from the map
+        marker.setMap(null);
+        marker.setMap(map);
+      }
+
+
+
+
+      // update_list();
+      if ($(".tray_wrapper").css("height") == "300px") {
+
+        slideDown();
+        
+      } else {
+        slideUp();
+      }
+
+
+  });
+
+
+
+
+  $("#delete_button").click(function() {
+    // console.log("delete");
+
+    $.each(pins, function(i){
+    if(pins[i].uuid === marker.uuid) {
+        pins.splice(i,1);
+        return false;
+    }
+    });
+    marker.circle.setMap(null);
+    marker.setMap(null);
+    marker = null;
+
+    // console.log(pins);
+
+    update_list();
+
+  });
+
+
+
+
+  // $(".locations_list").append(innerHTML);
+
+  // var innerHTML  = 
+
+  
+}
+
+function guid() {
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+}
+
+
+function updateSliderValue(value) {
+  if (value == 0) {
+    $("#slider_label").html("Disabled");
+
+  } else if (value == 1) {
+    $("#slider_label").html(value + " minute");
+
+  } else {
+    $("#slider_label").html(value + " minutes");
+
+  }
+
+}  
+
+
+function LongPress(map, length) {
+  this.length_ = length;
+  var me = this;
+  me.map_ = map;
+  me.timeoutId_ = null;
+  google.maps.event.addListener(map, 'mousedown', function(e) {
+    me.onMouseDown_(e);
+  });
+  google.maps.event.addListener(map, 'mouseup', function(e) {
+    me.onMouseUp_(e);
+  });
+  google.maps.event.addListener(map, 'drag', function(e) {
+    me.onMapDrag_(e);
+  });
+};
+LongPress.prototype.onMouseUp_ = function(e) {
+  clearTimeout(this.timeoutId_);
+};
+LongPress.prototype.onMouseDown_ = function(e) {
+  clearTimeout(this.timeoutId_);
+  var map = this.map_;
+  var event = e;
+  this.timeoutId_ = setTimeout(function() {
+    google.maps.event.trigger(map, 'longpress', event);
+  }, this.length_);
+};
+LongPress.prototype.onMapDrag_ = function(e) {
+  clearTimeout(this.timeoutId_);
+};
+
+function newCenter(center) {
+
+    var span = map.getBounds().toSpan(); // a latLng - # of deg map spans
+    
+
+    var new_center = { 
+        lat: center.lat() + span.lat()*(-0.25),
+        lng: center.lng()
+    };
+
+  return new_center;
+}
+
+
+function newCenterDown(center) {
+
+  console.log(center);
+
+    var span = map.getBounds().toSpan(); // a latLng - # of deg map spans
+    
+
+    var new_center = { 
+        lat: center.lat() + span.lat()*(-0.15),
+        lng: center.lng()
+    };
+
+  return new_center;
+}
+
+
+$(".knob_container").click(function(){
+
+  console.log("test");
+  console.log($(".tray_wrapper").css("height"));
+
+  if ($(".tray_wrapper").css("height") == "300px") {
+
+    slideDown();
+    
+  } else {
+    slideUp();
+  }
+
+
+});
+
+function slideUp() {
+  $(".tray_wrapper").css("height", "300px");
+  $(".tray_wrapper").css("top", "250px");
+  $(".locations_list").css("height", "267px");
+  $(".locations_list").css("overflow-y", "auto");
+  // $("#current_location_button").css("opacity", "0.0");
+  $("#current_location_button").css("top", "195px");
+
+
+  $(".locations_list").addClass("dragscroll");
+  dragscroll.reset();
+
+}
+
+function slideDown() {
+  update_list();
+  $(".tray_wrapper").css("height", "150px");
+  $(".tray_wrapper").css("top", "400px");
+  $(".locations_list").css("height", "115px");
+  $(".locations_list").css("overflow-y", "hidden");
+  // $("#current_location_button").css("opacity", "1.0");
+    $("#current_location_button").css("top", "345px");
+  $(".locations_list").removeClass("dragscroll");
+  dragscroll.reset();
+
+
+}
+
+$("#current_location_button").click(function(){
+      slideDown();
+  
+      // var location = new google.maps.LatLng(current_location_marker.position.lat(), current_location_marker.position.lng())
+      if (map.getZoom() != 17 ) {
+          map.setZoom(17);
+
+      }
+      
+      map.setCenter(newCenterDown(current_location_marker.position));
+
+
+      $("#current_location").css("color", "#4A90E2");
+
+
+
+});
+
+function update_simulation_list() {
+
+
+  //   $(".demo-list-control").empty();
+  //   // $(".demo-list-control").css("overflow-y", "auto");
+  //   // $('.demo-list-control').scrollTop(0);
+
+
+  //   if(pins.length == 0) {
+  //     slideDown();
+  //   }
+
+
+  //   pins.forEach(function(pin) {
+
+
+      
+  //     var uuid_for_sim = 'sim_' + pin.uuid;
+
+      
+  //   var innerHTML = '<li class="mdl-list__item"><span class="mdl-list__item-primary-content"><img class="simulation_list_icon" src=' + pin.icon + '>' + pin.name + '</span><span class="mdl-list__item-secondary-action"><label class="demo-list-radio mdl-radio mdl-js-radio mdl-js-ripple-effect" for=\"' + uuid_for_sim +'\"><input type="radio" id=\"' + uuid_for_sim + '\" class="mdl-radio__button" name="options" value="1" /></label></span></li>';
+
+
+
+
+  //   $(".demo-list-control").append(innerHTML);
+    
+    
+
+  // });
+
+
+
+}
+
+function exerciseSimulation(pin) {
+
+    switch(pin.large_icon) {
+
+      case icons['work'].large_icon:
+          // $("#work").css("opacity", "1.0");
+          //code block
+          // console.log("YESSS");
+          var type = "work";
+
+          break;
+      case icons['home'].large_icon:
+
+          var type = "home";
+          // $("#home").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['gym'].large_icon:
+
+          var type = "gym";
+          // $("#gym").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['bus'].large_icon:
+          var type = "bus";
+          // $("#bus").css("opacity", "1.0");
+         // code block
+          break;
+      case icons['food'].large_icon:
+
+          var type = "food";
+          // $("#food").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['park'].large_icon:
+
+          var type = "park";
+          // $("#park").css("opacity", "1.0");
+          //code block
+          break;
+      case icons['default'].large_icon:
+          var type = "default";
+          // $("#default").css("opacity", "1.0");
+          //code block
+          break;    
+      default:
+          var type = "default";
+          // $("#default").css("opacity", "1.0");
+
+        // console.log("NOPE");
+          //code block
+    }
+
+
+    $(".band_text_header").html("You arrived at " + pin.name);
+    $(".band_text_footer").html("Exercise type: " + type + " for " + pin.duration + " minutes.");
+
+
+
+}
+
+
+!function(e,n){"function"==typeof define&&define.amd?define(["exports"],n):n("undefined"!=typeof exports?exports:e.dragscroll={})}(this,function(e){var n,t,o=window,l=document,c="mousemove",r="mouseup",i="mousedown",m="EventListener",d="add"+m,s="remove"+m,f=[],u=function(e,m){for(e=0;e<f.length;)m=f[e++],m=m.container||m,m[s](i,m.md,0),o[s](r,m.mu,0),o[s](c,m.mm,0);for(f=[].slice.call(l.getElementsByClassName("dragscroll")),e=0;e<f.length;)!function(e,m,s,f,u,a){(a=e.container||e)[d](i,a.md=function(n){e.hasAttribute("nochilddrag")&&l.elementFromPoint(n.pageX,n.pageY)!=a||(f=1,m=n.clientX,s=n.clientY,n.preventDefault())},0),o[d](r,a.mu=function(){f=0},0),o[d](c,a.mm=function(o){f&&((u=e.scroller||e).scrollLeft-=n=-m+(m=o.clientX),u.scrollTop-=t=-s+(s=o.clientY),e==l.body&&((u=l.documentElement).scrollLeft-=n,u.scrollTop-=t))},0)}(f[e++])};"complete"==l.readyState?u():o[d]("load",u,0),e.reset=u});
+
+
+
+</script>
+
+
